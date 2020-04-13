@@ -1,0 +1,138 @@
+//
+//  main.cpp
+//  ums_oj
+//
+//  Created by 王辉 on 2020/4/4.
+//  Copyright © 2020 王辉. All rights reserved.
+//
+//计算20世纪中任意两个时间点之间的差（精确到毫秒）举例：
+//input:2000-01-01 00:00:00
+//      2000-01-01 00:00:01
+//output:1000
+#include <iostream>
+int day_year(int year);
+int day_month(int year,int month);
+int main(int argc, const char * argv[]) {
+    std::string Input[2];
+    for(int i=0;i<2;i++)
+    {
+        getline(std::cin,Input[i]);
+    }
+    std::string I=Input[0];
+    std::string O=Input[1];
+    std::cout<<I<<std::endl;
+    std::cout<<O<<std::endl;
+    int year_i;
+    year_i=1000*(I[0]-'0')+100*(I[1]-'0')+10*(I[2]-'0')+(I[3]-'0');
+    int year_o;
+    year_o=1000*(O[0]-'0')+100*(O[1]-'0')+10*(O[2]-'0')+(O[3]-'0');
+    int day_year_i;
+    int day_year_o;
+    day_year_i=0;
+    day_year_o=0;
+    for(int i=2000;i<year_i;i++)
+    {
+        day_year_i=day_year_i+day_year(i);
+    }
+    for(int i=2000;i<year_i;i++)
+    {
+        day_year_o=day_year_o+day_year(i);
+    }
+    int ms_year_i=86400*day_year_i;
+    int ms_year_o=86400*day_year_o;
+    //月份换算成秒
+    int month_i=10*(I[5]-'0')+1*(I[6]-'0');
+    int month_o=10*(O[5]-'0')+1*(O[6]-'0');
+    int day_month_i=0;
+    int day_month_o=0;
+    for(int i=1;i<month_i;i++)
+    {
+        day_month_i=day_month_i+day_month(year_i,i);
+    }
+    for(int i=1;i<month_o;i++)
+        {
+            day_month_o=day_month_o+day_month(year_o,i);
+        }
+    int ms_month_i=86400*day_month_i;
+    int ms_month_o=86400*day_month_o;
+    //日份换算成秒
+    int day_i=10*(I[8]-'0')+1*(I[9]-'0');
+    int day_o=10*(O[8]-'0')+1*(O[9]-'0');
+    int ms_day_i=86400*(day_i-1);
+    int ms_day_o=86400*(day_o-1);
+    //小时换算成秒
+    int hour_i=10*(I[11]-'0')+1*(I[12]-'0');
+    int hour_o=10*(O[11]-'0')+1*(O[12]-'0');
+    int ms_hour_i=3600*hour_i;
+    int ms_hour_o=3600*hour_o;
+    //分钟换算成秒
+    int minute_i=10*(I[14]-'0')+1*(I[15]-'0');
+    int minute_o=10*(O[14]-'0')+1*(O[15]-'0');
+    int ms_minute_i=60*minute_i;
+    int ms_minute_o=60*minute_o;
+    //秒换算成秒
+    int seconds_i=10*(I[17]-'0')+1*(I[18]-'0');
+    int seconds_o=10*(O[17]-'0')+1*(O[18]-'0');
+    int ms_seconds_i=1*seconds_i;
+    int ms_seconds_o=1*seconds_o;
+    //求和
+    int ms_i=ms_year_i+ms_month_i+ms_day_i+ms_hour_i+ms_minute_i+ms_seconds_i;
+    int ms_o=ms_year_o+ms_month_o+ms_day_o+ms_hour_o+ms_minute_o+ms_seconds_o;
+    int dis=ms_o-ms_i;
+    std::cout<<dis<<"000"<<std::endl;
+    return 0;
+}
+//函数自定义部分
+int day_year(int year)
+{
+    int day;
+    if (year%100==0)
+    {
+        if(year%400==0)
+        {
+            day=366;
+        }
+        else
+        {
+            day=365;
+            
+        }
+    }
+    else
+    {
+        if(year%4==0)
+        {
+            day=366;
+        }
+        else
+        {
+            day=365;
+        }
+    }
+    return day;
+}
+int day_month(int year,int month)
+{
+    int day;
+    if(month==1||month==3||month==5||month==7||month==8||month==10||month==12)
+    {
+        day=31;
+    }
+    else if(month==4||month==6||month==9||month==11)
+    {
+        day=30;
+    }
+    else
+    {
+        int tt=day_year(year);
+        if (tt==366)
+        {
+            day=29;
+        }
+        else
+        {
+            day=28;
+        }
+    }
+    return day;
+}
